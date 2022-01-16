@@ -273,6 +273,7 @@
             <!-- chat -->
             <div class="chat-outer">
               <ul class="chat-list">
+<!-- 				  
                 <li class="chat-text">
                   <span class="chat-text-name">Cheese</span>
                   <span class="chat-text-time">Today at 12:30</span>
@@ -296,7 +297,7 @@
                   <span class="chat-text-time">Today at 12:30</span>
                   <br>
                   <span class="chat-text-text">Is this thing working?</span>
-                </li>
+                </li> -->
               </ul>
             </div>
 
@@ -327,8 +328,8 @@
 		<h1>Pomodoro Timer</h1>
 		
 		<h1><span id="minutes">25</span>:<span id="seconds">00</span></h1>
+		<button onclick="restart_timer()">Restart</button>
 		<button onclick="start_timer()">Start</button>
-
 		<button onclick="pause_timer()">Pause</button>
 		
 		<!--
@@ -413,6 +414,7 @@
 	
   
 	<script>
+		let timer_on = 0; // off
 		function countdown() {
 			minutes = document.getElementById("minutes").innerHTML
 			seconds = document.getElementById("seconds").innerHTML
@@ -430,19 +432,34 @@
 
 			if (minutes == 00 && seconds == 00) {
 				alert("timer ended")
+
+				document.getElementById("minutes").innerHTML = 5;
+				document.getElementById("seconds").innerHTML = "00";
+				pause_timer()
+
+			}
+			timeout = setTimeout(countdown,1000);
+		}
+
+		function restart_timer() {
+			pause_timer()
+			document.getElementById("minutes").innerHTML = 25;
+			document.getElementById("seconds").innerHTML = "00";
+		}
+		function start_timer() {
+			if (!timer_on) {
+				timer_on = 1; // on
+				countdown()
 			}
 		}
 
-		function start_timer() {
-			setInterval(countdown,1000);
-		}
-
 		function pause_timer() {
-			clearTimeout(countdown);
+			clearTimeout(timeout);
+			timer_on = 0;
 		}
 
 		function resume_timer() {
-			setInterval(countdown,1000);
+			timeout = setTimeout(countdown,1000);
 		}
 
 		function update_video() {

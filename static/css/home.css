@@ -1,0 +1,11 @@
+  .my-absolute-px{
+        position: absolute;
+        top: 100px;
+        left: 100px;
+    }
+    
+    .my-absolute-percent{
+        position: absolute;
+        top: 50%;
+        left: 45%;
+    } 

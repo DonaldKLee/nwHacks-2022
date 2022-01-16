@@ -1,5 +1,6 @@
 import random, string, os
 from flask import Flask, render_template, request, redirect, url_for
+# from flask_socketio import SocketIO
 
 import dns, pymongo
 
@@ -17,6 +18,9 @@ app = Flask (
 	template_folder = "templates", # HTML files folder
 	static_folder = "staic" # Images and CSS files
 )
+
+# app.config['SECRET_KEY'] = random.choices(string.ascii_letters, k=4)) + "".join(random.choices(string.digits, k=4)
+# socketio = SocketIO(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -64,21 +68,16 @@ def home():
 
 @app.route('/room/<room_code>')
 def room(room_code):
-	if request.method == "POST":
-		print("hello")
-		current_time = datetime.today()
+	# if request.method == "POST":
+	# 	print("hello")
+	# 	current_time = datetime.today()
 
-		n = 25
-		# Add 15 minutes to current time
-		end_time = current_time + timedelta(minutes=n)
+	# 	n = 25
+	# 	# Add 15 minutes to current time
+	# 	end_time = current_time + timedelta(minutes=n)
 
-		print(end_time)
-	"""
-		Tasks:
-			- get time
-			- add to room data
-      
-	"""
+	# 	print(end_time)
+
 
 	foundroom = False
 
