@@ -52,9 +52,10 @@ body {
     overflow-y: hidden;
     white-space: nowrap;
     padding: 0.5rem 0.5rem;
-    background-color: var(--bg-secondary);
+    background-color: white;
     border-radius: 0.5rem;
     /* margin: 0.5rem 0.5rem; */
+	z-index: -2;
 }
 
 .participants-list {
@@ -65,6 +66,7 @@ body {
     list-style-type: none;
     padding: 0;
     margin: 0;
+	z-index: -2;
 }
 
 .participant {
@@ -90,9 +92,11 @@ body {
 .chat-outer {
     overflow-y: scroll;
     background-color: var(--bg-primary);
-    height: 55vh;
+    height: 54vh;
     margin: 1rem 0rem;
     border-radius: 0.5rem;
+	position: relative;
+	top: 20px;
 }
 
 .chat-list {
@@ -218,7 +222,7 @@ body {
 }
 
 .pomodoro-type-control-selected {
-    background-color: var(--bg-darker);
+    background-color: #FFB830;
     border-radius: 0.5rem;
 }
 
@@ -338,6 +342,124 @@ body {
 .number-text {
 	font-size: 20px;
 }
+
+// Added to Test ----------------------------
+
+/* Include the padding and border in an element's total width and height */
+* {
+  box-sizing: border-box;
+}
+
+/* Remove margins and padding from the list */
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the list items */
+ul li {
+  cursor: pointer;
+  position: relative;
+  padding: 12px 8px 12px 40px;
+  list-style-type: none;
+  background: #eee;
+  font-size: 18px;
+  transition: 0.2s;
+  
+  /* make the list items unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Set all odd list items to a different color (zebra-stripes) */
+ul li:nth-child(odd) {
+  background: #f9f9f9;
+}
+
+/* Darker background-color on hover */
+ul li:hover {
+  background: #ddd;
+}
+
+/* When clicked on, add a background color and strike out text */
+ul li.checked {
+  background: #888;
+  color: #fff;
+  text-decoration: line-through;
+}
+
+/* Add a "checked" mark when clicked on */
+ul li.checked::before {
+  content: '';
+  position: absolute;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+
+/* Style the close button */
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 12px 16px 12px 16px;
+}
+
+.close:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Style the header */
+.header {
+  padding: 30px 40px;
+  color: white;
+  text-align: center;
+}
+
+/* Clear floats after the header */
+.header:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the input */
+input {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  width: 75%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+
+/* Style the "Add" button */
+.addBtn {
+  padding: 10px;
+  width: 25%;
+  background: #d9d9d9;
+  color: #555;
+  float: left;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0;
+}
+
+.addBtn:hover {
+  background-color: #bbb;
+}
+// End of test -----------------------------
 </style>
 
   </head>
@@ -348,7 +470,7 @@ body {
         <div class="col-md-3 left">
           <!-- participants list -->
           <div style='overflow: hidden; border-radius: 0.5rem;'>
-          <div class="participants-outer" style="overflow: auto;">
+          <div class="participants-outer" style="overflow: auto; background: white;">
 			{% for user in room_data.users %}
 				<ul class="participants-list">
 				<li class="participant">
@@ -362,7 +484,7 @@ body {
           </div></div>
 
 
-            <div class="chat-wrapper" id="chat">
+            <div class="chat-wrapper" id="chat" style="margin-top: -30px;">
 
               <!-- chat -->
               <div class="chat-outer">
@@ -371,35 +493,35 @@ body {
                     <span class="chat-text-name">Cheese</span>
                     <span class="chat-text-time">Today at 12:30</span>
                     <br>
-                    <span class="chat-text-text">Is this thing working?</span>
+                    <span class="chat-text-text">Why did the frog cross the road?</span>
                   </li>
                   <li class="chat-text">
-                    <span class="chat-text-name">Soemone else</span>
+                    <span class="chat-text-name">Nugget</span>
                     <span class="chat-text-time">Today at 12:30</span>
                     <br>
-                    <span class="chat-text-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</span>
-                  </li>
-                  <li class="chat-text">
-                    <span class="chat-text-name">Cheese</span>
-                    <span class="chat-text-time">Today at 12:30</span>
-                    <br>
-                    <span class="chat-text-text">Is this thing working?</span>
+                    <span class="chat-text-text">Why?</span>
                   </li>
                   <li class="chat-text">
                     <span class="chat-text-name">Cheese</span>
                     <span class="chat-text-time">Today at 12:30</span>
                     <br>
-                    <span class="chat-text-text">Is this thing working?</span>
+                    <span class="chat-text-text">Oh wait, I "frog"ot the answer :)</span>
+                  </li>
+                  <li class="chat-text">
+                    <span class="chat-text-name">Burger</span>
+                    <span class="chat-text-time">Today at 12:30</span>
+                    <br>
+                    <span class="chat-text-text">...</span>
                   </li>
                 </ul>
               </div>
 
               <!-- chat input -->
 
-              <div class="input-outer">
+              <!-- <div class="input-outer">
                 <textarea name="" id="" cols="30" rows="2" class="input-input"></textarea>
                 <button class="btn btn-secondary input-button"><img src="https://img.icons8.com/ios/50/000000/paper-plane.png"/></button>
-              </div>
+              </div> -->
 
             </div>
 
@@ -447,28 +569,10 @@ body {
 
         </div>
 
-		<script>
-			var tasks = ["Test"];
-
-			function update_tasks() {
-				var all = document.getElementById("all_tasks");
-				for (i=0; i < tasks.length; i++) {
-					var task = document.createElement("li");
-					task.text = tasks[i];
-					all.appendChild(task);
-				}
-			}
-			// append new value to the array
-			function add_task() {
-				task = document.getElementById("add_task_input");
-				tasks.push(task);
-				update_tasks()
-			}
-		</script>
 
         <div class="todo-outer" id="todo">
 
-          <ul class="todo-list" id="all_tasks">
+          <ul class="todo-list">
             <!-- <li class="todo-item">
               <div class="todo-item-left-wrapper">
                 <input type="checkbox">
@@ -485,10 +589,22 @@ body {
               <div class="todo-item-delete">x</div>
             </li> -->
 
+        <!-- Original --
             <li class="todo-new">
               	<input id="add_task_input" type="text" class="todo-new-input" placeholder="New task">
 				<button onclick="add_task()">Add Task</button>
 			</li>
+      !-- Original -->
+      <!-- Test for adding tasks-->
+<div id="myDIV" class="header">
+  <input type="text" id="myInput" placeholder="Title...">
+  <span onclick="newElement()" class="addBtn">Add Tasks</span>
+</div>
+<!-- End test- 
+
+<ul id="myUL">
+
+</ul>
 
           </ul>
 
@@ -501,7 +617,7 @@ body {
           <span class="number-text">Room #: {{room_data.room_code}}</span>
           <span class="number-helper">Click me to copy!</span>
 
-		  <input style="display:none;" type="text" value= {{room_data.room_code}} id="code_box_invis">
+		  <input style="display:none;" type="text" value={{room_data.room_code}} id="code_box_invis">
         </div>
         <!-- room number -->
 
@@ -590,7 +706,7 @@ $(".number-outer").click(() => {
 	var copyText = document.getElementById("code_box_invis");
 	copyText.select();
 	copyText.setSelectionRange(0, 99999);
-	navigator.clipboard.writeText(copyText.value);
+	navigator.clipboard.writeText("https://nwhacks-2022.donaldklee.repl.co/room/" + copyText.value);
 		
     $(".number-helper").text("Copied!");
     setTimeout(() => {
@@ -607,8 +723,8 @@ $(".number-outer").click(() => {
         <!-- youtube embed -->
 
 		<p>YouTube URL:</p>
-		<input id="video_url" type="url" oninput="update_video()"></input>
-		<iframe id="video" width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		<input id="video_url" style="border: black 2px solid;" type="url" oninput="update_video()"></input>
+		<iframe id="video" width="100%" height="auto" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
         <!-- youtube search -->
@@ -623,11 +739,21 @@ $(".number-outer").click(() => {
 		let pomo_type = "pomo";
 		let timer_on = 0; // off
 
+		function pomo() {
+			if (pomo_type !== "pomo") {
+				document.getElementById("minutes").innerHTML = 25;
+				document.getElementById("seconds").innerHTML = "00";
+				pomo_type = "pomo";
+				pause_timer()
+			}
+		}
+
 		function long_break() {
 			if (pomo_type !== "long") {
 				document.getElementById("minutes").innerHTML = 15;
 				document.getElementById("seconds").innerHTML = "00";
 				pomo_type = "long";
+				pause_timer()
 			}
 		}
 
@@ -636,6 +762,7 @@ $(".number-outer").click(() => {
 				document.getElementById("minutes").innerHTML = 5;
 				document.getElementById("seconds").innerHTML = "00";
 				pomo_type = "short";
+				pause_timer()
 			}
 		}
 
@@ -664,9 +791,19 @@ $(".number-outer").click(() => {
 		}
 
 		function restart_timer() {
-			pause_timer()
-			document.getElementById("minutes").innerHTML = 25;
-			document.getElementById("seconds").innerHTML = "00";
+			pause_timer();
+			if (pomo_type == "long") {
+				document.getElementById("minutes").innerHTML = 15;
+				document.getElementById("seconds").innerHTML = "00";
+			}
+			else if (pomo_type == "short") {
+				document.getElementById("minutes").innerHTML = 5;
+				document.getElementById("seconds").innerHTML = "00";
+			}
+			else {
+				document.getElementById("minutes").innerHTML = 25;
+				document.getElementById("seconds").innerHTML = "00";
+			}
 		}
 		function start_timer() {
 			if (!timer_on) {
@@ -696,6 +833,63 @@ $(".number-outer").click(() => {
 
 			video.src = the_new_link[0];
 		}
+
+  // Test code for adding tasks ------------------
+  var myNodelist = document.getElementsByTagName("LI");
+  var i;
+  for (i = 0; i < myNodelist.length; i++) {
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    myNodelist[i].appendChild(span);
+  }
+
+// Click on a close button to hide the current list item
+  var close = document.getElementsByClassName("close");
+  var i;
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function() {
+      var div = this.parentElement;
+      div.style.display = "none";
+    }
+  }
+
+  // Add a "checked" symbol when clicking on a list item
+  var list = document.querySelector('ul');
+  list.addEventListener('click', function(ev) {
+    if (ev.target.tagName === 'LI') {
+      ev.target.classList.toggle('checked');
+    }
+  }, false);
+
+    // Create a new list item when clicking on the "Add" button
+  function newElement() {
+    var li = document.createElement("li");
+    var inputValue = document.getElementById("myInput").value;
+    var t = document.createTextNode(inputValue);
+    li.appendChild(t);
+    if (inputValue === '') {
+      alert("You must write something!");
+    } else {
+      document.getElementById("myUL").appendChild(li);
+    }
+    document.getElementById("myInput").value = "";
+
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    li.appendChild(span);
+
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function() {
+      var div = this.parentElement;
+      div.style.display = "none";
+    }
+  }
+}
+//End of test --------------------------------
 	</script>
 <!-- <script type="text/javascript" src="{{url_for('static', filename="javascript/pomodoro.js")}}"></script> -->
 

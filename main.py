@@ -15,7 +15,7 @@ db = client.Database
 app = Flask (
 	__name__,
 	template_folder = "templates", # HTML files folder
-	static_folder = "staic" # Images and CSS files
+	static_folder = "static" # Images and CSS files
 )
 
 @app.route('/', methods=['GET', 'POST'])
