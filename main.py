@@ -1,9 +1,11 @@
-import os
-import random, string
+import random, string, os
 from flask import Flask, render_template, request, redirect, url_for
 
-import dns
-import pymongo
+import dns, pymongo
+
+from datetime import datetime
+from datetime import timedelta
+
 
 mongodb_username = os.environ['mongodb_username']
 mongodb_password = os.environ['mongodb_password']
@@ -32,7 +34,8 @@ def home():
 			
 			room_data = {
 				"room_code": room_code,
-				"users": [request.form["name"]]
+				"users": [request.form["name"]],
+				"time_end": None
 			}
 
 			db.rooms.insert_one(room_data)
@@ -42,37 +45,41 @@ def home():
 		elif request.form.get('room_code') == "Join a room!":
 
 			room_code_submitted = request.form["room_code_submitted"]
-			name_submitted = request.form["name_submitted"]
+			#name_submitted = request.form["name_submitted"]
 			print(room_code_submitted)
 
 			for room in db.rooms.find({'room_code': str(room_code_submitted)}):
 				if len(room) > 0: # If that note has something
 					foundroom = True
-
-					# C8RWd383
 			
 					if foundroom:
-						db.rooms.update_one({'room_code': str(room_code_submitted)}, {'$push': {'users': name_submitted}})
+						#db.rooms.update_one({'room_code': str(room_code_submitted)}, {'$push': {'users': name_submitted}})
 						return redirect(url_for('room', room_code=str(room_code_submitted)))
 					
 					else:
 						return redirect(url_for, "/")
-
-
-			
-			"""
-				Tasks:
-					- If room code exists in database
-						- take user to room page
-
-					- 
-			"""
 		
 
 	return render_template("home.html")
 
 @app.route('/room/<room_code>')
 def room(room_code):
+	if request.method == "POST":
+		print("hello")
+		current_time = datetime.today()
+
+		n = 25
+		# Add 15 minutes to current time
+		end_time = current_time + timedelta(minutes=n)
+
+		print(end_time)
+	"""
+		Tasks:
+			- get time
+			- add to room data
+      
+	"""
+
 	foundroom = False
 
 	for room in db.rooms.find({'room_code': str(room_code)}):
