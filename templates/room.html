@@ -335,6 +335,9 @@ body {
 .timer_btn:hover {
 	transform: scale(1.3);
 }
+.number-text {
+	font-size: 20px;
+}
 </style>
 
   </head>
@@ -408,9 +411,9 @@ body {
           <!-- pomodoro -->
           <div class="pomodoro-timer-outer">
             <div class="pomodoro-type-controls">
-              <div class="pomodoro-type-control pomodoro-type-control-selected" id="type-pom"><span>Pomodoro</span></div>
-              <div class="pomodoro-type-control" id="type-short"><span>Short Break</span></div>
-              <div class="pomodoro-type-control" id="type-long"><span>Long Break</span></div>
+              <div class="pomodoro-type-control pomodoro-type-control-selected" onclick="pomo()" id="type-pom"><span>Pomodoro</span></div>
+              <div class="pomodoro-type-control" onclick="short_break()" id="type-short"><span>Short Break</span></div>
+              <div class="pomodoro-type-control" onclick="long_break()" id="type-long"><span>Long Break</span></div>
             </div>
             <div class="pomodoro-timer">
 
@@ -444,34 +447,61 @@ body {
 
         </div>
 
+		<script>
+			var tasks = ["Test"];
+
+			function update_tasks() {
+				var all = document.getElementById("all_tasks");
+				for (i=0; i < tasks.length; i++) {
+					var task = document.createElement("li");
+					task.text = tasks[i];
+					all.appendChild(task);
+				}
+			}
+			// append new value to the array
+			function add_task() {
+				task = document.getElementById("add_task_input");
+				tasks.push(task);
+				update_tasks()
+			}
+		</script>
+
         <div class="todo-outer" id="todo">
-          <ul class="todo-list">
-            <li class="todo-item">
+
+          <ul class="todo-list" id="all_tasks">
+            <!-- <li class="todo-item">
               <div class="todo-item-left-wrapper">
                 <input type="checkbox">
                 <span class="todo-item-text">Finish this hecking hackathon</span>
               </div>
               <div class="todo-item-delete">x</div>
             </li>
+
             <li class="todo-item todo-item-complete">
               <div class="todo-item-left-wrapper">
                 <input type="checkbox">
                 <span class="todo-item-text">Finish the cookies</span>
               </div>
               <div class="todo-item-delete">x</div>
-            </li>
+            </li> -->
+
             <li class="todo-new">
-              <input type="text" class="todo-new-input" placeholder="New task">
-            </li>
+              	<input id="add_task_input" type="text" class="todo-new-input" placeholder="New task">
+				<button onclick="add_task()">Add Task</button>
+			</li>
+
           </ul>
+
         </div>
 
       </div>
 
       <div class="col-md-3 right">
-        <div class="number-outer">
-          <span class="number-text">Room #<span class="number-number">{{room_code}}</span></span>
+        <div class="number-outer" onclick="copy_code()">
+          <span class="number-text">Room #: {{room_data.room_code}}</span>
           <span class="number-helper">Click me to copy!</span>
+
+		  <input style="display:none;" type="text" value= {{room_data.room_code}} id="code_box_invis">
         </div>
         <!-- room number -->
 
@@ -556,7 +586,12 @@ $("#type-long").click(() => {
 });
 
 $(".number-outer").click(() => {
-    navigator.clipboard.writeText("number here");
+    		
+	var copyText = document.getElementById("code_box_invis");
+	copyText.select();
+	copyText.setSelectionRange(0, 99999);
+	navigator.clipboard.writeText(copyText.value);
+		
     $(".number-helper").text("Copied!");
     setTimeout(() => {
         $(".number-helper").text("Click me to copy!");
@@ -564,54 +599,7 @@ $(".number-outer").click(() => {
 
 })
 
-			var socket = io.connect('https://' + document.domain + ':' + location.port);
-
-			socket.on( 'connect', function() {
-				socket.emit( 'my event', {
-				data: 'User Connected'
-				} )
-				var form = $( 'form' ).on( 'submit', function( e ) {
-				e.preventDefault()
-				let user_name = $( 'input.username' ).val()
-				let user_input = $( 'input.message' ).val()
-				socket.emit( 'my event', {
-					user_name : user_name,
-					message : user_input
-				} )
-				$( 'input.message' ).val( '' ).focus()
-				} )
-			} )
-			socket.on( 'my response', function( msg ) {
-				console.log( msg )
-				if( typeof msg.user_name !== 'undefined' ) {
-					$( 'h3' ).remove()
-					$( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
-				}
-			})
   </script>
-
-
-			<!-- for sockets -->
-	
-
-<!-- MARKER THING COMMENT -->
-
-          </div>
-
-          <!-- chat toggle -->
-          <div class="chat-toggle">
-            <span class="chat-toggle-text">Group Chat</span>
-            <!-- <span class="chat-toggle-button">-</span> -->
-            <div class="chat-toggle-button">
-              <div class="chat-toggle-button-line"></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-        <!-- todo list -->
-      </div>
 
       <div class="col-md-3">
         <!-- room number -->
@@ -631,8 +619,26 @@ $(".number-outer").click(() => {
   
 	
   
-	<script>
+	<script>	
+		let pomo_type = "pomo";
 		let timer_on = 0; // off
+
+		function long_break() {
+			if (pomo_type !== "long") {
+				document.getElementById("minutes").innerHTML = 15;
+				document.getElementById("seconds").innerHTML = "00";
+				pomo_type = "long";
+			}
+		}
+
+		function short_break() {
+			if (pomo_type !== "short") {
+				document.getElementById("minutes").innerHTML = 5;
+				document.getElementById("seconds").innerHTML = "00";
+				pomo_type = "short";
+			}
+		}
+
 		function countdown() {
 			minutes = document.getElementById("minutes").innerHTML
 			seconds = document.getElementById("seconds").innerHTML
@@ -650,9 +656,7 @@ $(".number-outer").click(() => {
 
 			if (minutes == 00 && seconds == 00) {
 				alert("timer ended")
-
-				document.getElementById("minutes").innerHTML = 5;
-				document.getElementById("seconds").innerHTML = "00";
+				short_break()
 				pause_timer()
 
 			}
@@ -693,7 +697,7 @@ $(".number-outer").click(() => {
 			video.src = the_new_link[0];
 		}
 	</script>
-<script type="text/javascript" src="{{url_for('static', filename="javascript/pomodoro.js")}}"></script>
+<!-- <script type="text/javascript" src="{{url_for('static', filename="javascript/pomodoro.js")}}"></script> -->
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
