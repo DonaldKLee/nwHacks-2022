@@ -1,5 +1,14 @@
+import os
 import random, string
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
+
+import dns
+import pymongo
+
+mongodb_username = os.environ['mongodb_username']
+mongodb_password = os.environ['mongodb_password']
+client = pymongo.MongoClient("mongodb+srv://"+mongodb_username+":"+mongodb_password+"@cluster0.s7jm6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+db = client.Database
 
 app = Flask (
 	__name__,
@@ -21,15 +30,36 @@ def home():
 			# The room code for joining other rooms
 			room_code = "".join(room_code_characters)
 			
-			"""
-				Tasks:
-					- Add room code to database
-					- Redirect user to the room
+			room_data = {
+				"room_code": room_code,
+				"users": [request.form["name"]]
+			}
 
-			"""
+			db.rooms.insert_one(room_data)
 
-		elif request.form.get('join_room') == "Join a room!":
-			print("aaaja")
+			return redirect(url_for('room', room_code=room_code))
+
+		elif request.form.get('room_code') == "Join a room!":
+
+			room_code_submitted = request.form["room_code_submitted"]
+			name_submitted = request.form["name_submitted"]
+			print(room_code_submitted)
+
+			for room in db.rooms.find({'room_code': str(room_code_submitted)}):
+				if len(room) > 0: # If that note has something
+					foundroom = True
+
+					# C8RWd383
+			
+					if foundroom:
+						db.rooms.update_one({'room_code': str(room_code_submitted)}, {'$push': {'users': name_submitted}})
+						return redirect(url_for('room', room_code=str(room_code_submitted)))
+					
+					else:
+						return redirect(url_for, "/")
+
+
+			
 			"""
 				Tasks:
 					- If room code exists in database
@@ -41,10 +71,19 @@ def home():
 
 	return render_template("home.html")
 
-@app.route('/room')
-def room():
-	return render_template("room.html")
+@app.route('/room/<room_code>')
+def room(room_code):
+	foundroom = False
 
+	for room in db.rooms.find({'room_code': str(room_code)}):
+		if len(room) > 0: # If that note has something
+			foundroom = True
+
+	if foundroom:
+		return render_template("room.html", room_data=room)
+	
+	else:
+		return render_template('404.html')
 
 if __name__ == "__main__":
 	app.run(

@@ -7,6 +7,8 @@ authors = ["DonaldKLee <<>>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 Flask = "^2.0.2"
+pymongo = "^4.0.1"
+dnspython = "^2.1.0"
 
 [tool.poetry.dev-dependencies]
 
